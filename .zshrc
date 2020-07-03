@@ -27,7 +27,7 @@ export KEYTIMEOUT=1
 
 # Alias
 
-alias ls="ls -a --color=auto"
+alias ls="ls -a -l --color=auto"
 alias scz="source ~/.zshrc"
 alias nv="nvim"
 
