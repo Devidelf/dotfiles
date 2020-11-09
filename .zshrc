@@ -4,7 +4,7 @@ HISTSIZE=500
 SAVEHIST=1000
 
 unsetopt autocd beep extendedglob notify
-bindkey -v
+# :bindkey -v
 
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
@@ -19,7 +19,7 @@ compinit
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export BROWSER=/usr/bin/firefox
+export BROWSER=/usr/bin/brave
 export EDITOR=/usr/bin/nvim 
 export VISUAL=/usr/bin/nvim
 export TERM=xterm-256color
@@ -27,7 +27,7 @@ export KEYTIMEOUT=1
 
 # Alias
 
-alias ls="ls -a -l --color=auto"
+alias ls="ls -a --color=auto"
 alias scz="source ~/.zshrc"
 alias nv="nvim"
 
@@ -77,7 +77,6 @@ source /usr/share/nvm/install-nvm-exec
 source /usr/share/nvm/init-nvm.sh
 
 #if [ -f /usr/bin/screenfetch ]; then screenfetch; fi
-
 
 autoload -U promptinit; promptinit
 prompt spaceship
