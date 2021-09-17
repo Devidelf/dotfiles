@@ -6,7 +6,10 @@ Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
-
+Plug 'neovim/nvim-lspconfig'
+"Plug 'hrsh7th/nvim-compe'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 " Themes
@@ -50,3 +53,9 @@ nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 
 :let mapleader = ' '
 inoremap jj <ESC>
+
+" Telescope
+nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>fg <cmd>Telescope live_grep<CR>
+nnoremap <leader>ff <cmd>Telescope buffers<CR>
+nnoremap <leader>ff <cmd>Telescope help_tags<CR>
