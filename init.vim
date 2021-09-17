@@ -7,10 +7,18 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'neovim/nvim-lspconfig'
-"Plug 'hrsh7th/nvim-compe'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} 
 Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
+
+" LSP
+
+lua << EOF
+require'lspconfig'.cssls.setup{
+cmd = {'/home/devi/.nvm/versions/node/v14.17.4/bin/vscode-css-language-server', '--stdio'}
+};
+EOF
 
 " Themes
 
@@ -57,5 +65,5 @@ inoremap jj <ESC>
 " Telescope
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
 nnoremap <leader>fg <cmd>Telescope live_grep<CR>
-nnoremap <leader>ff <cmd>Telescope buffers<CR>
-nnoremap <leader>ff <cmd>Telescope help_tags<CR>
+nnoremap <leader>fb <cmd>Telescope buffers<CR>
+nnoremap <leader>fh <cmd>Telescope help_tags<CR>

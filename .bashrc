@@ -9,6 +9,10 @@
 #export XMODIFIERS=@im=dbus
 #export QT_IM_MODULE=ibus
 
+#set -o vi
+#bind '"jj":vi-movement-mode'
+#bind -r "\r"
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -28,6 +32,8 @@ fi
 if [ -d "$HOME/.local/bin" ] ;
   then PATH="$HOME/.local/bin:$PATH"
 fi
+
+export PATH="$HOME/Applications:$PATH"
 
 #ignore upper and lowercase when TAB completion
 bind "set completion-ignore-case on"
@@ -205,6 +211,10 @@ alias bls="betterlockscreen -u /usr/share/backgrounds/arcolinux/"
 #give the list of all installed desktops - xsessions desktops
 alias xd="ls /usr/share/xsessions"
 
+alias kp="keepassxc-cli"
+alias agent="eval `ssh-agent`"
+alias xc="xclip -selection clipboard"
+
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
@@ -232,10 +242,11 @@ ex ()
   fi
 }
 
-#create a file called .bashrc-personal and put all your personal aliases
-#in there. They will not be overwritten by skel.
 
-[[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
 eval "$(starship init bash)"
 
 macchina
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
