@@ -9,16 +9,20 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} 
+Plug 'windwp/nvim-autopairs'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 call plug#end()
 
 " LSP
 
-lua << EOF
-require'lspconfig'.cssls.setup{
-cmd = {'/home/devi/.nvm/versions/node/v14.17.4/bin/vscode-css-language-server', '--stdio'}
-};
-EOF
+lua require('lsp-config')
+
+set completeopt=menu,menuone,noselect
 
 " Themes
 
@@ -61,6 +65,7 @@ nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 
 :let mapleader = ' '
 inoremap jj <ESC>
+nnoremap WW :w<cr>
 
 " Telescope
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
