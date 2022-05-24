@@ -5,10 +5,16 @@ local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 local null_ls = require('null-ls')
 local prettier = require('prettier')
 local cmp = require('cmp')
+local ls = require('luasnip')
+
 
 cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({map_char = {tex = ''}}))
 
-require('nvim-autopairs').setup{};
+require('nvim-autopairs').setup({
+  disable_filetype = { "html", "php" },
+});
+
+require('focus').setup();
 
 cmp.setup({
     snippet = {
@@ -17,6 +23,8 @@ cmp.setup({
       end,
     },
     mapping = {
+      ['<C-p>'] = cmp.mapping.select_prev_item(),
+      ['<C-n>'] = cmp.mapping.select_next_item(),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
       ['<C-Space>'] = cmp.mapping.complete(),
@@ -90,6 +98,10 @@ nvim_lsp.cssls.setup{
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 };
 
+require'lspconfig'.cssmodules_ls.setup{
+  cmd = {"cssmodules-language-server"}
+}
+
 nvim_lsp.tsserver.setup{
   on_attach = function(client)
     client.resolved_capabilities.document_formatting = false
@@ -106,9 +118,9 @@ nvim_lsp.tsserver.setup{
 
 nvim_lsp.html.setup{
   cmd = { "vscode-html-language-server", "--stdio" };
-  filetypes = { "html", "php" };
+  filetypes = { "php" };
   init_options = {
-    configurationSection = { "html", "php", "css" , "javascript"},
+    configurationSection = { "php", "css" , "javascript"},
     embeddedLanguages = {
     css = true,
     javascript = true
@@ -121,6 +133,8 @@ nvim_lsp.intelephense.setup({
   settings = {
     intelephense = {
       stubs = {
+        "standard",
+        "date",
         "Core",
         "wordpress",
         "woocommerce",
@@ -135,3 +149,6 @@ nvim_lsp.intelephense.setup({
   capabilities = capabilities,
   on_attach = on_attach
 });
+
+require("luasnip.loaders.from_vscode").lazy_load();
+require("luasnip.loaders.from_vscode").lazy_load({paths = {"~/.config/nvim/my-snippets"}});

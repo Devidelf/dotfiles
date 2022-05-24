@@ -1,5 +1,4 @@
 "Plugins
-
 call plug#begin('~/.config/nvim/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
@@ -19,15 +18,15 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'MunifTanjim/prettier.nvim'
 Plug 'mattn/emmet-vim'
 Plug 'ahmedkhalf/project.nvim'
+Plug 'beauwilliams/focus.nvim'
+Plug 'rafamadriz/friendly-snippets'
 call plug#end()
 
 " LSP
-
 lua require('lsp-config')
 lua require('projects')
 
 set completeopt=menu,menuone,noselect
-
 " Themes
 
 let g:lightline = {
@@ -50,6 +49,7 @@ set noshowmode
 syntax enable
 
 "Options
+
 set number        
 set relativenumber 
 set cursorline
@@ -77,14 +77,18 @@ let g:NERDTreeStatusline = ''
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Toggle
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+:let g:NERDTreeWinSize=70
 
 " Keybindings
 
 :let mapleader = ' '
 inoremap jj <ESC>
 nnoremap WW :w<cr>
+inoremap <c-s> <ESC>:w<cr>a
+nnoremap <c-s> :w<cr>
 
 " Telescope
+
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
 nnoremap <leader>fg <cmd>Telescope live_grep<CR>
 nnoremap <leader>fb <cmd>Telescope buffers<CR>
