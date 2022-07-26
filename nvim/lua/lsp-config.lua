@@ -1,6 +1,5 @@
-local nvim_lsp = require('lspconfig')
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local nvim_lsp = require('lspconfig') 
+local treesitter = require('nvim-treesitter.configs')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 local null_ls = require('null-ls')
 local prettier = require('prettier')
@@ -14,7 +13,38 @@ require('nvim-autopairs').setup({
   disable_filetype = { "html", "php" },
 });
 
-require('focus').setup();
+require('focus').setup({
+  bufnew = true,
+});
+vim.api.nvim_set_keymap('n', '<leader>h', ':FocusSplitLeft<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>j', ':FocusSplitDown<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>k', ':FocusSplitUp<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>l', ':FocusSplitRight<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>l', {silent = true})
+vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {silent = true})
+
+treesitter.setup {
+  ensure_installed = { "css", "lua", "javascript", "php", "html", "typescript"},
+  sync_install = false,
+  auto_install = true,
+
+  ignore_install = { "javascript" },
+
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+} 
+
+local on_attach = function(_, bufnr)
+  local nmap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
+    end 
+    vim.keymap.set('n', keys, func, {buffer = bufnr, desc = desc})
+  end 
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+end
 
 cmp.setup({
     snippet = {
@@ -22,21 +52,45 @@ cmp.setup({
         require('luasnip').lsp_expand(args.body)
       end,
     },
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
       ['<C-p>'] = cmp.mapping.select_prev_item(),
       ['<C-n>'] = cmp.mapping.select_next_item(),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
     },
-    sources = {
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    }),
+    sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'luasnip'},
+    }, {
       { name = 'buffer' },
-    }
+    })
 })
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 null_ls.setup({
   sources = {null_ls.builtins.formatting.prettier},
@@ -107,12 +161,13 @@ nvim_lsp.tsserver.setup{
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
   end,
+  flags = lsp_flags,
   cmd = { "typescript-language-server", "--stdio" };
   filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" };
   init_options = {
     hostInfo = "neovim"
   };
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities;
 };
 
 

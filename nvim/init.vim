@@ -11,6 +11,8 @@ Plug 'windwp/nvim-autopairs'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
@@ -22,11 +24,29 @@ Plug 'beauwilliams/focus.nvim'
 Plug 'rafamadriz/friendly-snippets'
 call plug#end()
 
+" Keybindings
+
+:let mapleader = ' '
+inoremap jj <ESC>
+nnoremap WW :w<cr>
+inoremap <c-s> <ESC>:w<cr>a
+nnoremap <c-s> :w<cr>
+
+" Telescope
+
+nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>fg <cmd>Telescope live_grep<CR>
+nnoremap <leader>fb <cmd>Telescope buffers<CR>
+nnoremap <leader>fh <cmd>Telescope help_tags<CR>
+nnoremap <leader>fp <cmd>Telescope projects<CR>
+
 " LSP
+
 lua require('lsp-config')
 lua require('projects')
 
 set completeopt=menu,menuone,noselect
+
 " Themes
 
 let g:lightline = {
@@ -79,18 +99,4 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 :let g:NERDTreeWinSize=70
 
-" Keybindings
 
-:let mapleader = ' '
-inoremap jj <ESC>
-nnoremap WW :w<cr>
-inoremap <c-s> <ESC>:w<cr>a
-nnoremap <c-s> :w<cr>
-
-" Telescope
-
-nnoremap <leader>ff <cmd>Telescope find_files<CR>
-nnoremap <leader>fg <cmd>Telescope live_grep<CR>
-nnoremap <leader>fb <cmd>Telescope buffers<CR>
-nnoremap <leader>fh <cmd>Telescope help_tags<CR>
-nnoremap <leader>fp <cmd>Telescope projects<CR>
