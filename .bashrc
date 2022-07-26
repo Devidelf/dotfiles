@@ -33,7 +33,7 @@ alias kp="keepassxc-cli"
 alias agent="eval `ssh-agent`"
 alias agenths="ssh-add ~/.ssh/id_rsa_hs"
 alias homeserver="ssh-add ~/.ssh/id_rsa_hs && ssh devi@192.168.178.29"
-
+alias clotheme="cd ~/public_html/clotheme.test"
 alias xc="xclip -selection clipboard"
 eval "$(starship init bash)"
 
