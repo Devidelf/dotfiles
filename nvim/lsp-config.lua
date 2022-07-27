@@ -5,15 +5,21 @@ local null_ls = require('null-ls')
 local prettier = require('prettier')
 local cmp = require('cmp')
 local ls = require('luasnip')
-local wk = require('which-key')
 local ll = require('lualine')
 
 cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({map_char = {tex = ''}}))
 
-ll.setup()
-
 require('nvim-autopairs').setup({
   disable_filetype = { "html", "php" },
+});
+
+ll.setup({
+  options = {
+    theme = 'gruvbox'
+  },
+  sections = {
+    lualine_c = {'filename', 'buffers'}
+  }
 });
 
 require('focus').setup({
@@ -21,10 +27,10 @@ require('focus').setup({
 });
 vim.api.nvim_set_keymap('n', '<leader>h', ':FocusSplitLeft<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<leader>j', ':FocusSplitDown<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>k', ':FocusSplitUp<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>l', ':FocusSplitRight<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>l', {silent = true})
 vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {silent = true})
-
-wk.setup{}
 
 treesitter.setup {
   ensure_installed = { "css", "lua", "javascript", "php", "html", "typescript"},
@@ -38,16 +44,6 @@ treesitter.setup {
     additional_vim_regex_highlighting = false,
   },
 } 
-
-local on_attach = function(_, bufnr)
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end 
-    vim.keymap.set('n', keys, func, {buffer = bufnr, desc = desc})
-  end 
-    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-end
 
 cmp.setup({
     snippet = {
@@ -65,12 +61,12 @@ cmp.setup({
       ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
+      },
+      ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif ls.expand_or_jumpable() then
+        ls.expand_or_jump()
       else
         fallback()
       end
@@ -78,8 +74,8 @@ cmp.setup({
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif ls.jumpable(-1) then
+        ls.jump(-1)
       else
         fallback()
       end
@@ -152,7 +148,7 @@ nvim_lsp.cssls.setup{
  settings = { 
    css = { validate = false}
   };
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 };
 
 require'lspconfig'.cssmodules_ls.setup{
@@ -176,15 +172,15 @@ nvim_lsp.tsserver.setup{
 
 nvim_lsp.html.setup{
   cmd = { "vscode-html-language-server", "--stdio" };
-  filetypes = { "php" };
+  filetypes = { "html" };
   init_options = {
-    configurationSection = { "php", "css" , "javascript"},
+    configurationSection = { "html", "css" , "javascript"},
     embeddedLanguages = {
     css = true,
     javascript = true
-    }
+    },
+    provideFormatter = true
   };
-    settings = {}
 };
 
 nvim_lsp.intelephense.setup({

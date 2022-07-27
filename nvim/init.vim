@@ -1,7 +1,9 @@
 "Plugins
 call plug#begin('~/.config/nvim/plugged')
 Plug 'morhetz/gruvbox'
-Plug 'itchyny/lightline.vim'
+Plug 'nvim-lualine/lualine.nvim'
+"Plug 'itchyny/lightline.vim'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'neovim/nvim-lspconfig'
@@ -22,6 +24,7 @@ Plug 'mattn/emmet-vim'
 Plug 'ahmedkhalf/project.nvim'
 Plug 'beauwilliams/focus.nvim'
 Plug 'rafamadriz/friendly-snippets'
+Plug 'folke/which-key.nvim'
 call plug#end()
 
 " Keybindings
@@ -49,9 +52,9 @@ set completeopt=menu,menuone,noselect
 
 " Themes
 
-let g:lightline = {
-    \ 'colorscheme': 'seoul256',
-    \ }
+"let g:lightline = {
+"   \ 'colorscheme': 'seoul256',
+"   \ }
 
 let g:gruvbox_transparent_bg=1
 let g:gruvbox_italic=1
@@ -69,7 +72,6 @@ set noshowmode
 syntax enable
 
 "Options
-
 set number        
 set relativenumber 
 set cursorline
@@ -83,12 +85,14 @@ set expandtab
 set clipboard=unnamed,unnamedplus
 set signcolumn=yes 
 set timeoutlen=200
-set hlsearch 
+set nohlsearch 
 set showcmd
+
+"Emmet
 let g:user_emmet_leader_key='<Space>'
-
+inoremap <leader>d <nop>
+ 
 "Nerdtree
-
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
