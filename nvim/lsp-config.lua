@@ -15,7 +15,7 @@ require('nvim-autopairs').setup({
 
 ll.setup({
   options = {
-    theme = 'gruvbox'
+    theme = 'auto'
   },
   sections = {
     lualine_c = {'filename', 'buffers'}
@@ -32,12 +32,16 @@ vim.api.nvim_set_keymap('n', '<leader>l', ':FocusSplitRight<CR>', { silent = tru
 vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>l', {silent = true})
 vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {silent = true})
 
+vim.api.nvim_set_keymap("n", "<leader>r", "<cmd>lua vim.lsp.buf.hover()<CR>", {silent = true})
+vim.api.nvim_set_keymap("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {silent = true})
+vim.api.nvim_set_keymap("n", "<leader>gf", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", {silent = true})
+
+
+
 treesitter.setup {
   ensure_installed = { "css", "lua", "javascript", "php", "html", "typescript"},
   sync_install = false,
   auto_install = true,
-
-  ignore_install = { "javascript" },
 
   highlight = {
     enable = true,
@@ -91,56 +95,36 @@ cmp.setup({
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+local my_source = {
+  null_ls.builtins.formatting.prettierd.with(
+    {
+      filetypes = {"html", "json", "css", "javascript", "typescript", "php"},
+    }
+  )
+} 
+
 null_ls.setup({
-  sources = {null_ls.builtins.formatting.prettier},
+  sources = my_source,
   on_attach = function(client, bufnr)
-    if client.resolved_capabilities.document_formatting then
-      -- vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.formatting()<CR>")
+    if client.server_capabilities.documentFormattingProvider then
+      vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.format({async = true})<CR>")
       -- format on save
-      vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()")
+      vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format({async = true})")
     end
 
-    if client.resolved_capabilities.document_range_formatting then
-      vim.cmd("xnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.range_formatting({})<CR>")
+    if client.server_capabilities.documentRangeFormattingProvider then
+      vim.cmd("xnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.range_format({async = true})<CR>")
     end
   end,
 })
 
 prettier.setup({
-  bin = 'prettier'; 
+  bin = 'prettierd', 
   filetypes = {
-    "css",
-    "graphql",
-    "html",
-    "javascript",
-    "javascriptreact",
-    "json",
-    "less",
-    "markdown",
-    "scss",
-    "typescript",
-    "typescriptreact",
-    "yaml",
-    "php",
-  },
-
-  -- prettier format options
-  arrow_parens = "always",
-  bracket_spacing = true,
-  embedded_language_formatting = "auto",
-  end_of_line = "lf",
-  html_whitespace_sensitivity = "css",
-  jsx_bracket_same_line = false,
-  jsx_single_quote = true,
-  print_width = 80,
-  prose_wrap = "preserve",
-  quote_props = "as-needed",
-  semi = true,
-  single_quote = true,
-  tab_width = 2,
-  trailing_comma = "es5",
-  use_tabs = false,
-  vue_indent_script_and_style = false,
+    'css',
+    'html', 
+    'javascript'
+  }
 })
 
 nvim_lsp.cssls.setup{
@@ -151,8 +135,9 @@ nvim_lsp.cssls.setup{
   capabilities = capabilities
 };
 
-require'lspconfig'.cssmodules_ls.setup{
-  cmd = {"cssmodules-language-server"}
+nvim_lsp.cssmodules_ls.setup{
+  cmd = {"cssmodules-language-server"};
+  filetypes = {"css"};
 }
 
 nvim_lsp.tsserver.setup{
