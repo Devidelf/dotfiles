@@ -1,8 +1,8 @@
 "Plugins
 call plug#begin('~/.config/nvim/plugged')
-Plug 'morhetz/gruvbox'
+"Plug 'morhetz/gruvbox'
+Plug 'luisiacc/gruvbox-baby', {'branch':'main'}
 Plug 'nvim-lualine/lualine.nvim'
-"Plug 'itchyny/lightline.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -25,6 +25,7 @@ Plug 'ahmedkhalf/project.nvim'
 Plug 'beauwilliams/focus.nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'folke/which-key.nvim'
+Plug 'StanAngeloff/php.vim', {'for': 'php'}
 call plug#end()
 
 " Keybindings
@@ -56,13 +57,17 @@ set completeopt=menu,menuone,noselect
 "   \ 'colorscheme': 'seoul256',
 "   \ }
 
-let g:gruvbox_transparent_bg=1
-let g:gruvbox_italic=1
-let g:gruvbox_number_column='bg1'
+"let g:gruvbox_transparent_bg=1
+"let g:gruvbox_italic=1
+"let g:gruvbox_number_column='bg1'
 
 set termguicolors
 
-autocmd vimenter * ++nested colorscheme gruvbox
+let g:gruvbox_baby_telescope_theme = 1
+let g:gurvbox_baby_background_color = "dark"
+let g:gurvbox_baby_function_style = "italic"
+let g:gurvbox_baby_keyword_style = "NONE"
+autocmd vimenter * ++nested colorscheme gruvbox-baby
 
 autocmd vimenter * highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
@@ -90,13 +95,14 @@ set showcmd
 
 "Emmet
 let g:user_emmet_leader_key='<Space>'
-inoremap <leader>d <nop>
- 
+let g:user_emmet_mode='n'
+
 "Nerdtree
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
 let g:NERDTreeStatusline = ''
+
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Toggle

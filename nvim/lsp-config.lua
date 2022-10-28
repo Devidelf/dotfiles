@@ -6,6 +6,7 @@ local prettier = require('prettier')
 local cmp = require('cmp')
 local ls = require('luasnip')
 local ll = require('lualine')
+local telescope = require('telescope')
 
 cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({map_char = {tex = ''}}))
 
@@ -15,12 +16,24 @@ require('nvim-autopairs').setup({
 
 ll.setup({
   options = {
-    theme = 'auto'
+    theme = 'gruvbox-baby'
   },
   sections = {
     lualine_c = {'filename', 'buffers'}
   }
 });
+
+
+telescope.setup({
+  defaults = {
+    borderchars = {
+      prompt = { "─", " ", " ", " ", "─", "─", " ", " " },
+      results = { " " },
+      preview = { " " },
+    },
+  }
+});
+
 
 require('focus').setup({
   bufnew = true,
@@ -35,8 +48,6 @@ vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {silent = true})
 vim.api.nvim_set_keymap("n", "<leader>r", "<cmd>lua vim.lsp.buf.hover()<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "<leader>gf", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", {silent = true})
-
-
 
 treesitter.setup {
   ensure_installed = { "css", "lua", "javascript", "php", "html", "typescript"},
@@ -93,7 +104,7 @@ cmp.setup({
     })
 })
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local my_source = {
   null_ls.builtins.formatting.prettierd.with(
@@ -186,8 +197,7 @@ nvim_lsp.intelephense.setup({
     };
   },
   capabilities = capabilities,
-  on_attach = on_attach
-});
+  on_attach = on_attach });
 
 require("luasnip.loaders.from_vscode").lazy_load();
 require("luasnip.loaders.from_vscode").lazy_load({paths = {"~/.config/nvim/my-snippets"}});
