@@ -7,8 +7,12 @@ local cmp = require('cmp')
 local ls = require('luasnip')
 local ll = require('lualine')
 local telescope = require('telescope')
+local indent = require('indent_blankline')
+local focus = require('focus')
+local color = require('nvim-highlight-colors');
 
 cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({map_char = {tex = ''}}))
+
 
 require('nvim-autopairs').setup({
   disable_filetype = { "html", "php" },
@@ -19,25 +23,25 @@ ll.setup({
     theme = 'gruvbox-baby'
   },
   sections = {
-    lualine_c = {'filename', 'buffers'}
+    lualine_c = {'filename'}
   }
 });
 
+require('nightfox').setup();
+vim.cmd("colorscheme nordfox")
 
-telescope.setup({
-  defaults = {
-    borderchars = {
-      prompt = { "─", " ", " ", " ", "─", "─", " ", " " },
-      results = { " " },
-      preview = { " " },
-    },
-  }
+indent.setup();
+color.setup();
+telescope.setup();
+
+vim.diagnostic.config({
+  virtual_text = false,
+})
+
+focus.setup({
+  bufnew = false,
 });
 
-
-require('focus').setup({
-  bufnew = true,
-});
 vim.api.nvim_set_keymap('n', '<leader>h', ':FocusSplitLeft<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<leader>j', ':FocusSplitDown<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<leader>k', ':FocusSplitUp<CR>', { silent = true })
@@ -47,6 +51,7 @@ vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {silent = true})
 
 vim.api.nvim_set_keymap("n", "<leader>r", "<cmd>lua vim.lsp.buf.hover()<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {silent = true})
+vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua vim.diagnostic.open_float()<CR>", {silent = true})
 vim.api.nvim_set_keymap("n", "<leader>gf", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", {silent = true})
 
 treesitter.setup {
@@ -59,6 +64,7 @@ treesitter.setup {
     additional_vim_regex_highlighting = false,
   },
 } 
+
 
 cmp.setup({
     snippet = {
@@ -99,6 +105,7 @@ cmp.setup({
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'luasnip'},
+      { name = 'csscp'},
     }, {
       { name = 'buffer' },
     })
@@ -134,7 +141,9 @@ prettier.setup({
   filetypes = {
     'css',
     'html', 
-    'javascript'
+    'javascript',
+    'lua',
+    'php',
   }
 })
 
@@ -152,9 +161,9 @@ nvim_lsp.cssmodules_ls.setup{
 }
 
 nvim_lsp.tsserver.setup{
-  on_attach = function(client)
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+ on_attach = function(client)
+    client.server_capabilities.document_formatting = false
+    client.server_capabilities.document_range_formatting = false
   end,
   flags = lsp_flags,
   cmd = { "typescript-language-server", "--stdio" };
@@ -197,7 +206,8 @@ nvim_lsp.intelephense.setup({
     };
   },
   capabilities = capabilities,
-  on_attach = on_attach });
+  on_attach = on_attach
+});
 
 require("luasnip.loaders.from_vscode").lazy_load();
 require("luasnip.loaders.from_vscode").lazy_load({paths = {"~/.config/nvim/my-snippets"}});

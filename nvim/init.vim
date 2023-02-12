@@ -2,6 +2,7 @@
 call plug#begin('~/.config/nvim/plugged')
 "Plug 'morhetz/gruvbox'
 Plug 'luisiacc/gruvbox-baby', {'branch':'main'}
+Plug 'EdenEast/nightfox.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'scrooloose/nerdtree'
@@ -16,7 +17,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'L3MON4D3/LuaSnip'
+Plug 'L3MON4D3/LuaSnip' 
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'MunifTanjim/prettier.nvim'
@@ -26,12 +27,17 @@ Plug 'beauwilliams/focus.nvim'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'folke/which-key.nvim'
 Plug 'StanAngeloff/php.vim', {'for': 'php'}
+Plug 'lukas-reineke/indent-blankline.nvim',
+Plug 'brenoprata10/nvim-highlight-colors',
+Plug '~/Repos/csscp'
 call plug#end()
 
 " Keybindings
 
-:let mapleader = ' '
+let mapleader = ' '
 inoremap jj <ESC>
+inoremap jj <ESC>
+xnoremap <c-c> <ESC>
 nnoremap WW :w<cr>
 inoremap <c-s> <ESC>:w<cr>a
 nnoremap <c-s> :w<cr>
@@ -52,22 +58,8 @@ lua require('projects')
 set completeopt=menu,menuone,noselect
 
 " Themes
-
-"let g:lightline = {
-"   \ 'colorscheme': 'seoul256',
-"   \ }
-
-"let g:gruvbox_transparent_bg=1
-"let g:gruvbox_italic=1
-"let g:gruvbox_number_column='bg1'
-
+set t_Co=256
 set termguicolors
-
-let g:gruvbox_baby_telescope_theme = 1
-let g:gurvbox_baby_background_color = "dark"
-let g:gurvbox_baby_function_style = "italic"
-let g:gurvbox_baby_keyword_style = "NONE"
-autocmd vimenter * ++nested colorscheme gruvbox-baby
 
 autocmd vimenter * highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
@@ -84,6 +76,8 @@ set ignorecase
 set showmatch
 set fileencoding=utf-8
 set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 set smarttab
 set cindent
 set expandtab
@@ -108,5 +102,3 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Toggle
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 :let g:NERDTreeWinSize=70
-
-
